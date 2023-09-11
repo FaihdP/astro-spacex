@@ -1,0 +1,42 @@
+---
+import { getLaunchBy } from "../../services/spacex.ts";
+import Layout from "../../layouts/Layout.astro";
+
+export const prerender = false
+
+const { id } = Astro.params
+
+let launch
+if (id) {
+  launch = await getLaunchBy({ id })
+}
+
+const launchStatus = launch.success ? "Success" : "Failure"; 
+
+---
+
+<Layout title={`Lanzamiento ${id}`}>
+  <article class="flex gap-y-4 flex-col text-center items-center">
+    <h2 class="text-center text-white text-xl font-bold">
+      Launch #{launch?.flight_number}
+    </h2>
+    <span 
+      class:list={[
+        "text-s font-semibold mt-4 mr-2 px-2.5 py-0.5 rounded",
+        {
+          "bg-green-400 text-green-900": launch?.success,
+          "bg-red-400 text-red-900": !launch?.success
+        }
+      ]}
+    >
+      {launchStatus}
+    </span>
+    <img
+      class="w-65 h-auto mt-4 bg-gray-800 p-4 rounded-2xl"
+      src={launch?.links?.patch.small}
+      alt={launch?.name}
+    />
+    <p class="text-lg font-extralight mt-4 text-gray-300">{ launch?.details ? launch?.details : "No details" }</p>
+  </article>
+</Layout>
+
