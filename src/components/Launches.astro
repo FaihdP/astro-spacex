@@ -5,11 +5,11 @@ import { getLatestLaunches } from "../services/spacex";
 const launches = await getLatestLaunches();
 ---
 
-<div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-  {
-    launches.map((launch) => {
-      return (
-        <CardLaunch 
+{
+  launches ? (
+    <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+      {launches.map((launch) => (
+        <CardLaunch
           id={launch.id}
           name={launch.name}
           img={launch.links.patch.small}
@@ -17,7 +17,14 @@ const launches = await getLatestLaunches();
           details={launch.details}
           flightNumber={launch.flight_number}
         />
-      )
-    })
-  }
-</div>
+      ))}
+    </div>
+  ) : (
+    <div class="text-center text-white font-bold text-3xl flex flex-col items-center">
+      <img src="/videos/oops.gif" alt="Oops!" />
+      <span class="mt-10">Launches don't found</span>
+    </div>
+  )
+}
+
+  

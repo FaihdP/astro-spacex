@@ -8,7 +8,7 @@ export async function getLaunchBy({ id }: { id: string }) {
 }
 
 export async function getLatestLaunches() {
-    const res = await fetch('https://api.spacexdata.com/v5/launches/query', {
+  const res = await fetch('https://api.spacexdata.com/v5/launches/query', {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -24,6 +24,8 @@ export async function getLatestLaunches() {
     })
   })
 
+  if (res.status === 404) return null
+  
   const { docs: launches } = await res.json() as APISpaceXResponse;
 
   return launches;
